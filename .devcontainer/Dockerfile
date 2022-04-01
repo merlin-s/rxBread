@@ -9,7 +9,7 @@ ARG VARIANT
 RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
         software-properties-common wget apt-utils file zip \
-        openssh-client gpg-agent socat rsync \
+        openssh-client gpg-agent socat rsync pkg-config \
         make ninja-build git \
         python3 python3-pip
 
@@ -77,6 +77,8 @@ RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
 RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
         doxygen graphviz ccache cppcheck
+
+RUN pip install cmake_format
 
 # Install include-what-you-use
 ENV IWYU /home/iwyu

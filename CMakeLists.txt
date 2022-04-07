@@ -32,7 +32,7 @@ project(
     VERSION 0.0.1
     DESCRIPTION ""
     HOMEPAGE_URL "https://github.com/merlin-s/rxBread"
-    LANGUAGES CXX)
+    LANGUAGES C CXX)
 
 set(GIT_SHA
     "Unknown"

@@ -4,10 +4,8 @@ on:
   release:
     types: [published]
   push:
-    tags:
     branches:
       - main
-      - develop
 
 env:
   # Conan cache environment variables
@@ -47,12 +45,13 @@ jobs:
           - os: macos-11
           - os: windows-2022
             compiler: gcc-11
-          - build_type: Debug
-            developer_mode: OFF
           - build_type: Release
             developer_mode: ON
 
         include:
+          - os: windows-2022
+            generator: "Visual Studio 17 2022"
+
           - compiler: gcc-11
             gcov_executable: gcov
           - compiler: llvm-13.0.0
@@ -61,9 +60,6 @@ jobs:
           # Set up preferred package generators, for given build configurations
           - build_type: Release
             package_generator: TBZ2
-
-          - os: windows-2022
-            generator: "Visual Studio 17 2022"
 
     steps:
       - uses: actions/checkout@v2

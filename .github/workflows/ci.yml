@@ -29,6 +29,7 @@ jobs:
         compiler:
           - llvm-13.0.0
           - gcc-11
+          - msvc
         generator:
           - "Ninja"
         build_type:
@@ -39,11 +40,17 @@ jobs:
           - OFF
 
         exclude:
+          - os: ubuntu-20.04
+            compiler: llvm-13.0.0
+          - os: ubuntu-20.04
+            compiler: msvc
           - os: macos-11
           - os: windows-2022
             compiler: gcc-11
           - build_type: Debug
             developer_mode: OFF
+          - build_type: Release
+            developer_mode: ON
 
         include:
           - compiler: gcc-11
@@ -53,14 +60,9 @@ jobs:
 
           # Set up preferred package generators, for given build configurations
           - build_type: Release
-            developer_mode: OFF
             package_generator: TBZ2
 
-          - build_type: Release
-            developer_mode: OFF
-
           - os: windows-2022
-            compiler: msvc
             generator: "Visual Studio 17 2022"
 
     steps:

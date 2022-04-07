@@ -19,21 +19,14 @@ jobs:
   Test:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
+      fail-fast: true
 
-      # Recommendations:
-      #   * support at least 2 operating systems
-      #   * support at least 2 compilers
-      #   * make sure all supported configurations for your project are built
-      #
-      # Disable/enable builds in this list to meet the above recommendations
-      # and your own projects needs
       matrix:
         os:
           - ubuntu-20.04
           - macos-11
+          - windows-2022
         compiler:
-          # you can specify the version after `-` like "llvm-13.0.0".
           - llvm-13.0.0
           - gcc-11
         generator:
@@ -46,15 +39,13 @@ jobs:
           - OFF
 
         exclude:
-          # mingw is determined by this author to be too buggy to support
           - os: macos-11
+          - os: windows-2022
             compiler: gcc-11
-          - os: ubuntu-20.04
-            compiler: llvm-13.0.0
+          - build_type: Debug
+            developer_mode: OFF
 
         include:
-          # Add appropriate variables for gcov version required. This will intentionally break
-          # if you try to use a compiler that does not have gcov set
           - compiler: gcc-11
             gcov_executable: gcov
           - compiler: llvm-13.0.0
@@ -65,29 +56,12 @@ jobs:
             developer_mode: OFF
             package_generator: TBZ2
 
-          - os: windows-2022
-            compiler: msvc
-            generator: "Visual Studio 17 2022"
-            build_type: Debug
-            developer_mode: ON
-          - os: windows-2022
-            compiler: msvc
-            generator: "Visual Studio 17 2022"
-            build_type: Release
-            developer_mode: ON
-          - os: windows-2022
-            compiler: msvc
-            generator: "Visual Studio 17 2022"
-            build_type: Debug
+          - build_type: Release
             developer_mode: OFF
+
           - os: windows-2022
             compiler: msvc
             generator: "Visual Studio 17 2022"
-            build_type: Release
-            developer_mode: OFF
-            package_generator: ZIP
-
-
 
     steps:
       - uses: actions/checkout@v2
@@ -160,7 +134,6 @@ jobs:
         with:
           files: |
             build/*-*${{ matrix.build_type }}*-*.*
-
 
       - name: Publish to codecov
         uses: codecov/codecov-action@v2
